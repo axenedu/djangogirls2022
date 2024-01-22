@@ -1,8 +1,10 @@
 from django.test import TestCase
 
+from .forms import PostForm
+
+
 # Create your tests here.
 #Create a test to check PostForm contains the fields specified in the tutorial
-from .forms import PostForm
 
 class PostFormTest(TestCase):
 
