@@ -1,29 +1,44 @@
 # pull official base image
-FROM python:3.11.4-slim-buster
+FROM python:slim-bookworm
 
-# set work directory
-WORKDIR /usr/src/app
+
+# install system dependencies
+RUN apt-get update && apt-get install -y netcat-traditional
+
+# create the django user
+RUN addgroup --system django \
+    && adduser --system --group django
+USER django
+
+#SET work directory
+ENV HOME=/home/django
+ENV PROJECT_NAME=project
+ENV APP_HOME=$HOME/$PROJECT_NAME
+WORKDIR $HOME
+RUN mkdir $APP_HOME
+WORKDIR $APP_HOME
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV VIRTUAL_ENV=$HOME/${PROJECT_NAME}_venv
+RUN python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-# install system dependencies
-RUN apt-get update && apt-get install -y netcat
 
 # install dependencies
 # ¿Posible virtualenv?
-# RUN python -m pip install pip
+RUN python -m pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
 # copy entrypoint.sh
 COPY ./entrypoint.sh .
-RUN sed -i 's/\r$//g' /usr/src/app/entrypoint.sh
-RUN chmod +x /usr/src/app/entrypoint.sh
+#RUN sed -i 's/\r$//g' /usr/src/app/entrypoint.sh
+#RUN chmod +x ${APP_HOME}/entrypoint.sh
 
 # copy project
 COPY . .
 
 # run entrypoint.sh
-ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+ENTRYPOINT ["/home/django/project/entrypoint.sh"]
