@@ -1,5 +1,8 @@
 #!/bin/sh
 
+#ls -la /home/django/mysite_venv/bin
+#source /home/django/mysite_venv/bin/activate
+
 if [ "$DATABASE" = "postgres" ]
 then
     echo "Waiting for postgres..."

@@ -22,12 +22,13 @@ WORKDIR $APP_HOME
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV VIRTUAL_ENV=$HOME/${PROJECT_NAME}_venv
+
+# create virtual environment
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 
 # install dependencies
-# ¿Posible virtualenv?
 RUN python -m pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
