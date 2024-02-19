@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgsql-deployment
+  labels:
+    app: djangogirls
+    type: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: djangogirls
+      type: database
+  template:
+    metadata:
+      labels:
+        app: djangogirls
+        type: database
+    spec:
+      containers:
+        - name: contenedor-postgresql
+          image: postgres:15
+          ports:
+            - containerPort: 5432
+              name: db-port
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: bd-pgsql
+                  key: potgres_user
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: bd-pgsql
+                  key: postgres_db
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bd-passwords
+                  key: postgres_password
