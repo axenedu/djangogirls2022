@@ -28,7 +28,7 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: bd-pgsql
-                  key: potgres_user
+                  key: postgres_user
             - name: POSTGRES_DB
               valueFrom:
                 configMapKeyRef:
