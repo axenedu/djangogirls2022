@@ -3,9 +3,9 @@ kind: Deployment
 metadata:
   name: django-app
   labels:
-    app: polls
+    app: django
 spec:
-	replicas: 2
+  replicas: 2
   selector:
     matchLabels:
       app: django
@@ -17,6 +17,7 @@ spec:
       containers:
         - image: axenedu/django-prod-server:latest
           name: django
+          command: gunicorn mysite.wsgi:application --bind 0.0.0.0:8000 --workers 3
           envFrom:
           - secretRef:
               name: django-secret
@@ -28,3 +29,6 @@ spec:
           env:
             - name: SQL_HOST
               value: "pgsql-service"
+          volumeMounts:
+          - mountPath: "/home/django/mysite/staticfiles"
+            name: static-volume
