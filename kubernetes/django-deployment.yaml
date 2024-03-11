@@ -15,7 +15,7 @@ spec:
         app: django
     spec:
       containers:
-        - image: axenedu/django-prod-server:latest
+        - image: axenedu/django-prod-server:lastest
           name: django
           command: ["gunicorn", "--bind", ":8000", "--workers", "3", "mysite.wsgi"]
           envFrom:
