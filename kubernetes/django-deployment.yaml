@@ -17,7 +17,7 @@ spec:
       containers:
         - image: axenedu/django-prod-server:latest
           name: django
-          command: gunicorn mysite.wsgi:application --bind 0.0.0.0:8000 --workers 3
+          command: ["gunicorn", "--bind", ":8000", "--workers", "3", "mysite.wsgi"]
           envFrom:
           - secretRef:
               name: django-secret
@@ -29,6 +29,6 @@ spec:
           env:
             - name: SQL_HOST
               value: "pgsql-service"
-          volumeMounts:
-          - mountPath: "/home/django/mysite/staticfiles"
-            name: static-volume
+          # volumeMounts:
+          # - mountPath: "/home/django/mysite/staticfiles"
+          #   name: static-volume
